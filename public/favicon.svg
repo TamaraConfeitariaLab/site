@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="31" fill="#59331f"/>
+  <circle cx="32" cy="32" r="31" fill="none" stroke="#e6713f" stroke-width="1.5"/>
+  <circle cx="24" cy="24" r="2.6" fill="#fdf6ec"/>
+  <circle cx="38" cy="22" r="2" fill="#fdf6ec"/>
+  <circle cx="30" cy="34" r="2.3" fill="#fdf6ec"/>
+  <circle cx="41" cy="33" r="1.8" fill="#fdf6ec"/>
+  <circle cx="22" cy="38" r="1.7" fill="#fdf6ec"/>
+  <circle cx="35" cy="43" r="2" fill="#fdf6ec"/>
+</svg>
