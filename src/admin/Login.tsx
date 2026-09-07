@@ -1,8 +1,11 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Lock, Mail } from 'lucide-react'
 import { Logo } from '../components/Logo'
 import { useAuth } from '../context/AuthContext'
+
+const MAX_ATTEMPTS = 5
+const LOCKOUT_SECONDS = 30
 
 export function AdminLogin() {
   const { session, isAdmin, loading, signIn } = useAuth()
@@ -10,18 +13,41 @@ export function AdminLogin() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [failedAttempts, setFailedAttempts] = useState(0)
+  const [lockedUntil, setLockedUntil] = useState<number | null>(null)
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    if (!lockedUntil) return
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [lockedUntil])
 
   if (!loading && session && isAdmin) {
     return <Navigate to="/admin/produtos" replace />
   }
 
+  const secondsLeft = lockedUntil ? Math.max(0, Math.ceil((lockedUntil - now) / 1000)) : 0
+  const isLocked = secondsLeft > 0
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if (isLocked) return
     setSubmitting(true)
     setError(null)
     const { error } = await signIn(email, password)
     setSubmitting(false)
-    if (error) setError(error)
+    if (error) {
+      const attempts = failedAttempts + 1
+      setFailedAttempts(attempts)
+      if (attempts >= MAX_ATTEMPTS) {
+        setLockedUntil(Date.now() + LOCKOUT_SECONDS * 1000)
+        setFailedAttempts(0)
+        setError(`Muitas tentativas. Aguarde ${LOCKOUT_SECONDS}s para tentar novamente.`)
+      } else {
+        setError(error)
+      }
+    }
   }
 
   return (
@@ -70,11 +96,17 @@ export function AdminLogin() {
           </div>
           {error && (
             <p className="rounded-lg bg-terracotta-50 px-3 py-2 text-sm text-terracotta-700">
-              {error}
+              {isLocked
+                ? `Muitas tentativas. Aguarde ${secondsLeft}s para tentar novamente.`
+                : error}
             </p>
           )}
-          <button type="submit" disabled={submitting} className="btn btn-primary mt-2 justify-center disabled:opacity-60">
-            {submitting ? 'Entrando...' : 'Entrar'}
+          <button
+            type="submit"
+            disabled={submitting || isLocked}
+            className="btn btn-primary mt-2 justify-center disabled:opacity-60"
+          >
+            {isLocked ? `Aguarde ${secondsLeft}s` : submitting ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
       </div>

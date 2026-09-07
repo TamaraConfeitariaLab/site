@@ -58,10 +58,17 @@ Acesse `/admin/login` com o e-mail e senha enviados separadamente. No painel é 
 ### Segurança
 
 - O login usa autenticação da Supabase (e-mail + senha), com sessão criptografada.
-- Só contas explicitamente marcadas como administrador (tabela `admins` no banco) conseguem criar, editar ou excluir dados — todo o resto do banco é somente leitura para visitantes, reforçado por Row Level Security (RLS) no Postgres.
-- Troque a senha em **Configurações da conta** (ou peça para redefinir) sempre que desejar; recomendamos trocar a senha inicial após o primeiro acesso.
-- Nenhuma credencial fica salva no código-fonte ou no repositório.
+- Só contas explicitamente marcadas como administrador (tabela `admins` no banco) conseguem criar, editar ou excluir dados — todo o resto do banco é somente leitura para visitantes, reforçado por Row Level Security (RLS) no Postgres, com funções auxiliares rodando sob os privilégios mínimos necessários (nunca mais do que o exigido).
+- Upload de imagens é restrito a administradores autenticados e validado também no servidor (só imagens, até 5MB), não só no navegador.
+- Login com **bloqueio automático**: após 5 tentativas erradas seguidas, o formulário trava por 30 segundos (dificulta ataques de força bruta), além do rate limit que a própria Supabase já aplica no servidor.
+- Cabeçalhos de segurança HTTP (`Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) configurados no `netlify.toml`, reduzindo riscos de clickjacking, sniffing de conteúdo e scripts não autorizados.
+- `robots.txt` impede que buscadores indexem as rotas `/admin/*`.
+- Regras de integridade no banco (preço e estoque não podem ser negativos, campos obrigatórios não podem ficar vazios).
+- Nenhuma credencial fica salva no código-fonte ou no repositório — `.env.local` está no `.gitignore`.
+- Troque a senha quando quiser me pedindo, ou diretamente no painel do Supabase (Authentication → Users).
+
+**Recomendação extra (ajuste manual, fora do meu alcance por API):** no painel do Supabase, em Authentication → Policies/Providers, ative "Leaked password protection" (bloqueia senhas vazadas conhecidas) — é uma configuração que só pode ser feita pela interface do Supabase, não por código.
 
 ## Banco de dados (Supabase)
 
-Tabelas: `categories`, `products`, `fairs`, `site_settings`, `admins`. Todas com RLS habilitado — leitura pública dos itens ativos, escrita restrita a administradores. Imagens de produtos ficam no bucket `product-images` (leitura pública, upload restrito a administradores).
+Tabelas: `categories`, `products`, `fairs`, `site_settings`, `admins`. Todas com RLS habilitado — leitura pública dos itens ativos, escrita restrita a administradores. Imagens de produtos ficam no bucket `product-images` (leitura pública, upload restrito a administradores, limitado a arquivos de imagem de até 5MB).
