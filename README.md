@@ -32,15 +32,19 @@ npm run dev
 
 Essas informações **não são secretas** (são de uso público no navegador) mas identificam o seu projeto — não é necessário trocar depois de configurado.
 
-## Deploy (recomendado: Vercel)
+## Deploy (Netlify)
 
-1. Acesse [vercel.com/new](https://vercel.com/new) e importe este repositório GitHub.
-2. Framework preset: **Vite** (detectado automaticamente).
-3. Em "Environment Variables", adicione `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (valores no `.env.local` ou enviados junto com as credenciais de acesso).
+1. Acesse [app.netlify.com/start](https://app.netlify.com/start) e importe este repositório GitHub (branch `main`).
+2. Configuração de build:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+3. Em "Site configuration → Environment variables", adicione `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (valores no `.env.local` ou enviados junto com as credenciais de acesso).
 4. Deploy. Pronto — o site já fica no ar com HTTPS automático.
-5. Opcional: conecte um domínio próprio em "Settings → Domains".
+5. Opcional: conecte um domínio próprio em "Domain management".
 
-Qualquer outra hospedagem de site estático (Netlify, Cloudflare Pages, etc.) funciona do mesmo jeito: `npm run build` gera a pasta `dist/`, que é o site pronto para publicar.
+O arquivo `public/_redirects` já está incluso no projeto e é essencial para o Netlify: garante que rotas como `/catalogo` ou `/admin/login` funcionem ao acessar/atualizar a página diretamente (o site é uma SPA — sem ele, essas URLs dariam erro 404 no Netlify).
+
+Qualquer outra hospedagem de site estático (Vercel, Cloudflare Pages, etc.) funciona do mesmo jeito: `npm run build` gera a pasta `dist/`, que é o site pronto para publicar.
 
 ## Painel administrativo
 
