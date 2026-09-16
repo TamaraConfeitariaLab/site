@@ -81,9 +81,10 @@ export function Footer() {
       </div>
 
       <div className="border-t border-cream/10 py-5">
-        <p className="container-page text-center text-xs text-cream/50">
-          © {new Date().getFullYear()} Tamara Confeitaria Lab. Todos os direitos reservados.
-        </p>
+        <div className="container-page flex flex-col items-center gap-1.5 text-center text-xs text-cream/50 sm:flex-row sm:justify-between sm:gap-4">
+          <p>© {new Date().getFullYear()} Tamara Confeitaria Lab. Todos os direitos reservados.</p>
+          <p>Desenvolvido por PMG Code</p>
+        </div>
       </div>
     </footer>
   )
