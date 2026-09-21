@@ -2,10 +2,37 @@ import { useState } from 'react'
 import { useCategories, useProducts } from '../hooks/useSupabaseQuery'
 import { ProductCard } from '../components/ProductCard'
 
+type ActiveFilter =
+  | { kind: 'all' }
+  | { kind: 'category'; slug: string }
+  | { kind: 'ready' }
+  | { kind: 'gift' }
+
 export function Catalogo() {
   const { data: categories } = useCategories()
-  const [activeSlug, setActiveSlug] = useState<string | undefined>(undefined)
-  const { data: products, loading } = useProducts({ categorySlug: activeSlug })
+  const [filter, setFilter] = useState<ActiveFilter>({ kind: 'all' })
+
+  const { data: products, loading } = useProducts(
+    filter.kind === 'category'
+      ? { categorySlug: filter.slug }
+      : filter.kind === 'ready'
+        ? { readyToShip: true }
+        : filter.kind === 'gift'
+          ? { giftable: true }
+          : undefined,
+  )
+
+  function isActive(f: ActiveFilter) {
+    if (f.kind !== filter.kind) return false
+    if (f.kind === 'category' && filter.kind === 'category') return f.slug === filter.slug
+    return true
+  }
+
+  function chipClass(active: boolean) {
+    return `shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+      active ? 'bg-cocoa-800 text-cream' : 'border border-cocoa-200 text-cocoa-700 hover:bg-cocoa-100'
+    }`
+  }
 
   return (
     <div className="container-page py-16 md:py-20">
@@ -17,35 +44,30 @@ export function Catalogo() {
           Cookies, brownies e muito mais
         </h1>
         <p className="mt-4 text-cocoa-600">
-          Explore todos os nossos sabores. Clique em um item para adicionar ao pedido e
-          finalizar direto pelo WhatsApp.
+          Explore todos os nossos sabores. Clique em um item para ver os detalhes e
+          adicionar ao pedido, finalizando direto pelo WhatsApp.
         </p>
       </div>
 
       <div className="mt-8 flex flex-wrap gap-2 overflow-x-auto">
-        <button
-          onClick={() => setActiveSlug(undefined)}
-          className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-            activeSlug === undefined
-              ? 'bg-cocoa-800 text-cream'
-              : 'border border-cocoa-200 text-cocoa-700 hover:bg-cocoa-100'
-          }`}
-        >
+        <button onClick={() => setFilter({ kind: 'all' })} className={chipClass(isActive({ kind: 'all' }))}>
           Todos
         </button>
         {categories.map((c) => (
           <button
             key={c.id}
-            onClick={() => setActiveSlug(c.slug)}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-              activeSlug === c.slug
-                ? 'bg-cocoa-800 text-cream'
-                : 'border border-cocoa-200 text-cocoa-700 hover:bg-cocoa-100'
-            }`}
+            onClick={() => setFilter({ kind: 'category', slug: c.slug })}
+            className={chipClass(isActive({ kind: 'category', slug: c.slug }))}
           >
             {c.name}
           </button>
         ))}
+        <button onClick={() => setFilter({ kind: 'ready' })} className={chipClass(isActive({ kind: 'ready' }))}>
+          Pronta entrega
+        </button>
+        <button onClick={() => setFilter({ kind: 'gift' })} className={chipClass(isActive({ kind: 'gift' }))}>
+          Presentes
+        </button>
       </div>
 
       <div className="mt-10">

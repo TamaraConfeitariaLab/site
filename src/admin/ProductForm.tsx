@@ -10,6 +10,7 @@ const EMPTY: Omit<Product, 'id' | 'created_at' | 'updated_at'> = {
   slug: '',
   name: '',
   description: '',
+  consumption_suggestion: '',
   price_cents: 0,
   category_id: null,
   image_url: null,
@@ -142,11 +143,32 @@ export function ProductForm() {
         <div>
           <label className="mb-1.5 block text-sm font-medium text-cocoa-700">Descrição</label>
           <textarea
-            rows={3}
+            rows={4}
             value={form.description ?? ''}
             onChange={(e) => update('description', e.target.value)}
             className="w-full rounded-xl border border-cocoa-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-terracotta-400"
           />
+          <p className="mt-1.5 text-xs text-cocoa-400">
+            Pode escrever à vontade — no site o cliente vê um resumo no card e a descrição
+            completa ao clicar no produto.
+          </p>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-cocoa-700">
+            Sugestão de consumo
+          </label>
+          <textarea
+            rows={2}
+            value={form.consumption_suggestion ?? ''}
+            onChange={(e) => update('consumption_suggestion', e.target.value)}
+            placeholder="Ex: café coado, um copo de leite gelado..."
+            className="w-full rounded-xl border border-cocoa-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-terracotta-400"
+          />
+          <p className="mt-1.5 text-xs text-cocoa-400">
+            Aparece na página do produto como "Combina perfeitamente com...". Deixe em branco
+            para não mostrar essa seção.
+          </p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">

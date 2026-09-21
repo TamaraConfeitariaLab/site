@@ -41,7 +41,7 @@ export function Home() {
               <Sparkles className="h-3.5 w-3.5" />
               Cookies e brownies artesanais em {settings.city}
             </span>
-            <h1 className="mt-6 font-display text-4xl font-semibold leading-[1.1] text-cocoa-800 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 font-montserrat text-4xl font-semibold leading-[1.1] text-cocoa-800 sm:text-5xl lg:text-6xl">
               {settings.hero_title}
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-cocoa-600">
@@ -71,7 +71,7 @@ export function Home() {
           <div className="relative">
             <div className="overflow-hidden rounded-[2rem] border-4 border-white shadow-2xl shadow-cocoa-900/10">
               <img
-                src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=900&q=80"
+                src="/images/hero-cookies.jpg"
                 alt="Cookies e brownies artesanais Tamara Confeitaria Lab"
                 className="aspect-[4/3] w-full object-cover"
               />

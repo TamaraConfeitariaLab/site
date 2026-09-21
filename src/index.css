@@ -3,6 +3,7 @@
 @theme {
   --font-display: "Fraunces", "Georgia", serif;
   --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-montserrat: "Montserrat", "Inter", system-ui, sans-serif;
 
   --color-cream: #fdf6ec;
   --color-cream-dark: #f7ead6;

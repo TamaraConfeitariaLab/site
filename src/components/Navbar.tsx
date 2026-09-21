@@ -10,11 +10,9 @@ const NAV_LINKS = [
   { to: '/', label: 'Início' },
   { to: '/sobre', label: 'Sobre' },
   { to: '/catalogo', label: 'Catálogo' },
-  { to: '/pronta-entrega', label: 'Pronta entrega' },
   { to: '/monte-sua-caixa', label: 'Monte sua caixa' },
-  { to: '/feiras', label: 'Feiras' },
   { to: '/encomendas', label: 'Encomendas' },
-  { to: '/presentes', label: 'Presentes' },
+  { to: '/feiras', label: 'Feiras' },
 ]
 
 export function Navbar() {

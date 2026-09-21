@@ -11,6 +11,7 @@ export type Product = {
   slug: string
   name: string
   description: string | null
+  consumption_suggestion: string | null
   price_cents: number
   category_id: string | null
   image_url: string | null
