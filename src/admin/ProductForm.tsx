@@ -73,9 +73,22 @@ export function ProductForm() {
       slug: form.slug || slugify(form.name),
     }
 
-    const { error } = isNew
-      ? await supabase.from('products').insert(payload)
-      : await supabase.from('products').update(payload).eq('id', id)
+    let error
+    if (isNew) {
+      // Append new products at the end of the list instead of always
+      // slotting into position 0, so it doesn't jump ahead of the order
+      // chosen in the admin panel.
+      const { data: last } = await supabase
+        .from('products')
+        .select('sort_order')
+        .order('sort_order', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      payload.sort_order = (last?.sort_order ?? -1) + 1
+      ;({ error } = await supabase.from('products').insert(payload))
+    } else {
+      ;({ error } = await supabase.from('products').update(payload).eq('id', id))
+    }
 
     setSaving(false)
     if (error) {

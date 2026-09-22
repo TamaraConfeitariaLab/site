@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, Pencil, Plus, Trash2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { formatPrice } from '../lib/format'
 import type { Product } from '../types'
@@ -34,13 +34,31 @@ export function ProductsAdmin() {
     if (!error) setProducts((prev) => prev.filter((x) => x.id !== p.id))
   }
 
+  async function move(index: number, direction: -1 | 1) {
+    const target = index + direction
+    if (target < 0 || target >= products.length) return
+
+    const reordered = [...products]
+    ;[reordered[index], reordered[target]] = [reordered[target], reordered[index]]
+
+    // Renumber everyone sequentially (not just the two swapped rows) so ties
+    // left over from older data never resurface a stale order on reload.
+    const renumbered = reordered.map((p, i) => ({ ...p, sort_order: i }))
+    setProducts(renumbered)
+
+    await Promise.all(
+      renumbered.map((p) => supabase.from('products').update({ sort_order: p.sort_order }).eq('id', p.id)),
+    )
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-semibold text-cocoa-800">Produtos</h1>
           <p className="mt-1 text-sm text-cocoa-500">
-            Gerencie cookies, brownies e itens do catálogo.
+            Gerencie cookies, brownies e itens do catálogo. Use as setas para escolher a
+            ordem em que os produtos aparecem no site.
           </p>
         </div>
         <Link to="/admin/produtos/novo" className="btn btn-primary">
@@ -57,6 +75,7 @@ export function ProductsAdmin() {
           <table className="w-full min-w-[720px] text-sm">
             <thead>
               <tr className="border-b border-cocoa-100 text-left text-xs uppercase tracking-wide text-cocoa-400">
+                <th className="px-5 py-3 font-medium">Ordem</th>
                 <th className="px-5 py-3 font-medium">Produto</th>
                 <th className="px-5 py-3 font-medium">Preço</th>
                 <th className="px-5 py-3 font-medium">Tags</th>
@@ -65,8 +84,28 @@ export function ProductsAdmin() {
               </tr>
             </thead>
             <tbody>
-              {products.map((p) => (
+              {products.map((p, index) => (
                 <tr key={p.id} className="border-b border-cocoa-50 last:border-0">
+                  <td className="px-5 py-3">
+                    <div className="flex flex-col gap-0.5">
+                      <button
+                        onClick={() => move(index, -1)}
+                        disabled={index === 0}
+                        className="flex h-6 w-6 items-center justify-center rounded text-cocoa-500 hover:bg-cocoa-100 disabled:cursor-not-allowed disabled:opacity-30"
+                        aria-label="Mover para cima"
+                      >
+                        <ChevronUp className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => move(index, 1)}
+                        disabled={index === products.length - 1}
+                        className="flex h-6 w-6 items-center justify-center rounded text-cocoa-500 hover:bg-cocoa-100 disabled:cursor-not-allowed disabled:opacity-30"
+                        aria-label="Mover para baixo"
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-cocoa-100">
