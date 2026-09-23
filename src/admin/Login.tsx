@@ -54,13 +54,8 @@ export function AdminLogin() {
     <div className="flex min-h-screen items-center justify-center bg-cream px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <Logo className="h-14 w-14" />
-          <div>
-            <p className="font-display text-xl font-semibold text-cocoa-800">
-              Tamara Confeitaria Lab
-            </p>
-            <p className="text-sm text-cocoa-500">Painel administrativo</p>
-          </div>
+          <Logo className="h-16" />
+          <p className="text-sm text-cocoa-500">Painel administrativo</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card flex flex-col gap-4 p-6 shadow-lg">

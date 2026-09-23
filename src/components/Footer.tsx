@@ -12,12 +12,7 @@ export function Footer() {
     <footer className="mt-24 border-t border-cocoa-100 bg-cocoa-800 text-cream/80">
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-3">
-            <Logo />
-            <span className="font-display text-lg font-semibold text-cream">
-              Tamara Confeitaria Lab
-            </span>
-          </div>
+          <Logo className="h-10" />
           <p className="mt-4 text-sm leading-relaxed text-cream/70">
             Cookies e brownies artesanais feitos à mão em {settings.city}, com ingredientes
             selecionados e muito carinho em cada lote.

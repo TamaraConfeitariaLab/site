@@ -16,14 +16,9 @@ export function AdminLayout() {
   return (
     <div className="flex min-h-screen bg-cream-dark">
       <aside className="flex w-64 shrink-0 flex-col border-r border-cocoa-100 bg-white">
-        <div className="flex items-center gap-2.5 border-b border-cocoa-100 px-5 py-5">
-          <Logo className="h-9 w-9" />
-          <div className="leading-tight">
-            <p className="font-display text-sm font-semibold text-cocoa-800">
-              Tamara Confeitaria
-            </p>
-            <p className="text-xs text-cocoa-400">Painel admin</p>
-          </div>
+        <div className="flex flex-col gap-1 border-b border-cocoa-100 px-5 py-5">
+          <Logo className="h-8" />
+          <p className="text-xs text-cocoa-400">Painel admin</p>
         </div>
         <nav className="flex flex-1 flex-col gap-1 p-3">
           {LINKS.map(({ to, label, icon: Icon }) => (

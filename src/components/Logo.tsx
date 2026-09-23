@@ -1,9 +1,5 @@
-export function Logo({ className = 'h-11 w-11' }: { className?: string }) {
+export function Logo({ className = 'h-9' }: { className?: string }) {
   return (
-    <img
-      src="/images/logo.jpg"
-      alt="Tamara Confeitaria Lab"
-      className={`${className} shrink-0 rounded-full object-cover object-top`}
-    />
+    <img src="/images/logo-wordmark.png" alt="Tamara Confeitaria Lab" className={`${className} w-auto object-contain`} />
   )
 }

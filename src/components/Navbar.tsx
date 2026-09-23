@@ -24,13 +24,8 @@ export function Navbar() {
     <header className="sticky top-0 z-30 border-b border-cocoa-100 bg-cream/90 backdrop-blur-md">
       <div className="container-page flex h-20 items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-          <Logo />
-          <div className="leading-tight">
-            <p className="font-display text-lg font-semibold text-cocoa-800 sm:text-xl">
-              Tamara Confeitaria Lab
-            </p>
-            <p className="text-xs text-cocoa-500">Cookies e Brownies Artesanais</p>
-          </div>
+          <Logo className="h-10 sm:h-11" />
+          <p className="hidden text-xs text-cocoa-500 sm:block">Cookies e Brownies Artesanais</p>
         </Link>
 
         <nav className="hidden items-center gap-0.5 xl:flex">
